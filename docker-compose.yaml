@@ -1,0 +1,19 @@
+version: '3.1'
+
+services:
+  db:
+    user: 1000:998
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: phonebook
+      PGDATA: /data/postgres
+    volumes:
+    - ./pgdata:/data/postgres
+    ports:
+    - 5432:5432
+
+volumes:
+  pgdata:
