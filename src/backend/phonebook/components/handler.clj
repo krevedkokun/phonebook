@@ -15,12 +15,13 @@
      ["/contacts" ::todo]]]])
 
 (defmethod ig/init-key ::handler
-  [_ _]
+  [_ {:keys [db]}]
   (reitit.ring/ring-handler
    (reitit.ring/router
     (routes-v1)
     {:data
-     {:muuntaja   muuntaja.core/instance
+     {:db         db
+      :muuntaja   muuntaja.core/instance
       :middleware [reitit.ring.middleware.parameters/parameters-middleware
                    reitit.ring.middleware.muuntaja/format-middleware
                    reitit.ring.middleware.exception/exception-middleware]}})
