@@ -7,17 +7,24 @@
             [phonebook.components.server :as server]))
 
 (def config
-  {::server/server         {:handler (ig/ref ::api/api)
-                            :options {:port 9876}}
-   ::db/db                 {:dbspec {:dbtype   "postgresql"
-                                     :username "postgres"
-                                     :password "postgres"
-                                     :dbname   "phonebook"}}
-   ::migrations/migrations {:options {:store         :database
-                                      :migration-dir "migrations/"}
-                            :db      (ig/ref ::db/db)}
-   ::api/api               {:migrations (ig/ref ::migrations/migrations)
-                            :db         (ig/ref ::db/db)}})
+  {::server/server
+   {:handler (ig/ref ::api/api)
+    :options {:port 9876}}
+
+   ::db/db
+   {:dbspec {:dbtype   "postgresql"
+             :username "postgres"
+             :password "postgres"
+             :dbname   "phonebook"}}
+
+   ::migrations/migrations
+   {:options {:store         :database
+              :migration-dir "migrations/"}
+    :db      (ig/ref ::db/db)}
+
+   ::api/api
+   {:migrations (ig/ref ::migrations/migrations)
+    :db         (ig/ref ::db/db)}})
 
 (defn -main
   [& _args]
