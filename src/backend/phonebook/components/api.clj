@@ -1,4 +1,4 @@
-(ns phonebook.components.handler
+(ns phonebook.components.api
   (:require [integrant.core :as ig]
             [muuntaja.core]
             [reitit.ring]
@@ -14,7 +14,7 @@
     ["/v1"
      ["/contacts" ::todo]]]])
 
-(defmethod ig/init-key ::handler
+(defmethod ig/init-key ::api
   [_ {:keys [db]}]
   (reitit.ring/ring-handler
    (reitit.ring/router
