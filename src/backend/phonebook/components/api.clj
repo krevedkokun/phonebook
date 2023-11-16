@@ -2,6 +2,7 @@
   (:require [integrant.core :as ig]
             [muuntaja.core]
             [phonebook.api.contacts :as contacts-api]
+            [phonebook.api.static :as static]
             [reitit.ring]
             [reitit.ring.coercion]
             [reitit.ring.middleware.exception]
@@ -10,7 +11,7 @@
 
 (defn routes-v1
   []
-  [["/index.html" ::index]
+  [["/index.html" static/index]
    ["/api"
     ["/v1"
      ["/contacts"
@@ -32,4 +33,6 @@
       :middleware [reitit.ring.middleware.parameters/parameters-middleware
                    reitit.ring.middleware.muuntaja/format-middleware
                    reitit.ring.middleware.exception/exception-middleware]}})
-   (reitit.ring/create-default-handler)))
+   (reitit.ring/routes
+    (reitit.ring/create-resource-handler {:path "/" :root ""})
+    (reitit.ring/create-default-handler))))
