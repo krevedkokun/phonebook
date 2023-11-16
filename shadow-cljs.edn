@@ -4,4 +4,4 @@
   {:target :browser
    :output-dir "public/js"
    :asset-path "/js"
-   :modules {:main {:entries [phonebook.ui.core]}}}}}
+   :modules {:main {:init-fn phonebook.ui.core/main}}}}}

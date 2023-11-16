@@ -1,0 +1,22 @@
+** how to run project
+1. run db
+#+begin_src shell
+UID=$(id -u) GID=$(id -g) docker compose up -d
+#+end_src
+
+2. install npm packages
+#+begin_src shell
+npm i
+#+end_src
+
+3. compile cljs code
+#+begin_src shell
+npx shadow-cljs compile :app
+#+end_src
+
+4. run clojure app
+#+begin_src shell
+clojure -M:frontend -m phonebook.core
+#+end_src
+
+5. open [[http://localhost:9876/index.html][app]] in browser
