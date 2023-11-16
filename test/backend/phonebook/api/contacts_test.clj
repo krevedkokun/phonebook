@@ -17,8 +17,8 @@
 
 (deftest create-contact-test
   (is (= {:status 201
-          :body {:name "John Doe"
-                 :phone "88005553535"}}
+          :body #:contacts{:name "John Doe"
+                           :phone "88005553535"}}
          (sut/create-contact
           {:db (tc/get-test-db)
            :body-params
@@ -26,8 +26,8 @@
             :phone "88005553535"}})))
 
   (is (= {:status 200
-          :body {:name "John Doe"
-                 :phone "88005553535"}}
+          :body #:contacts{:name "John Doe"
+                           :phone "88005553535"}}
          (sut/create-contact
           {:db (tc/get-test-db)
            :body-params
@@ -48,32 +48,32 @@
       :body-params r}))
 
   (is (= {:status 200
-          :body [{:name "John Doe"
-                  :phone "88005553535"}
-                 {:name "Scarlet Johansson"
-                  :phone "88005553535"}]}
+          :body [#:contacts{:name "John Doe"
+                            :phone "88005553535"}
+                 #:contacts{:name "Scarlet Johansson"
+                            :phone "88005553535"}]}
          (sut/search-contacts {:db (tc/get-test-db)
                                :query-params {:name "Joh"}})))
 
   (is (= {:status 200
-          :body [{:name "John Doe"
-                  :phone "88005553535"}
-                 {:name "Scarlet Johansson"
-                  :phone "88005553535"}]}
+          :body [#:contacts{:name "John Doe"
+                            :phone "88005553535"}
+                 #:contacts{:name "Scarlet Johansson"
+                            :phone "88005553535"}]}
          (sut/search-contacts {:db (tc/get-test-db)
                                :query-params {:name "jOh"}})))
   (is (= {:status 200
-          :body [{:name "John Doe"
-                  :phone "88005553535"}
-                 {:name "Scarlet Johansson"
-                  :phone "88005553535"}]}
+          :body [#:contacts{:name "John Doe"
+                            :phone "88005553535"}
+                 #:contacts{:name "Scarlet Johansson"
+                            :phone "88005553535"}]}
          (sut/search-contacts {:db (tc/get-test-db)
                                :query-params {:name "JOH"}})))
   (is (= {:status 200
-          :body [{:name "John Doe"
-                  :phone "88005553535"}
-                 {:name "Scarlet Johansson"
-                  :phone "88005553535"}]}
+          :body [#:contacts{:name "John Doe"
+                            :phone "88005553535"}
+                 #:contacts{:name "Scarlet Johansson"
+                            :phone "88005553535"}]}
          (sut/search-contacts {:db (tc/get-test-db)
                                :query-params {:name "joh"}}))))
 
@@ -84,8 +84,8 @@
                   :phone "88005553535"}})
 
   (is (= {:status 200
-          :body {:name "John Doe"
-                 :phone "88005553535"}}
+          :body #:contacts{:name "John Doe"
+                           :phone "88005553535"}}
          (sut/read-contact {:db (tc/get-test-db)
                             :path-params {:name "John Doe"}})))
 

@@ -1,6 +1,7 @@
 (ns phonebook.components.api
   (:require [integrant.core :as ig]
             [muuntaja.core]
+            [phonebook.api.contacts :as contacts-api]
             [reitit.ring]
             [reitit.ring.coercion]
             [reitit.ring.middleware.exception]
@@ -12,7 +13,13 @@
   [["/index.html" ::index]
    ["/api"
     ["/v1"
-     ["/contacts" ::todo]]]])
+     ["/contacts"
+      [""
+       {:get  contacts-api/search-contacts
+        :post contacts-api/create-contact}]
+      ["/:name"
+       {:get    contacts-api/read-contact
+        :delete contacts-api/delete-contact}]]]]])
 
 (defmethod ig/init-key ::api
   [_ {:keys [db]}]
