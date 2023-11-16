@@ -20,7 +20,7 @@
           :body #:contacts{:name "John Doe"
                            :phone "88005553535"}}
          (sut/create-contact
-          {:db (tc/get-test-db)
+          {:reitit.core/match {:data {:db (tc/get-test-db)}}
            :body-params
            {:name "John Doe"
             :phone "88005553535"}})))
@@ -29,7 +29,7 @@
           :body #:contacts{:name "John Doe"
                            :phone "88005553535"}}
          (sut/create-contact
-          {:db (tc/get-test-db)
+          {:reitit.core/match {:data {:db (tc/get-test-db)}}
            :body-params
            {:name "John Doe"
             :phone "53535550088"}}))))
@@ -44,69 +44,76 @@
              {:name "Rich Hickey"
               :phone "88005553535"}]]
     (sut/create-contact
-     {:db (tc/get-test-db)
+     {:reitit.core/match {:data {:db (tc/get-test-db)}}
       :body-params r}))
 
   (is (= {:status 200
-          :body [#:contacts{:name "John Doe"
-                            :phone "88005553535"}
-                 #:contacts{:name "Scarlet Johansson"
-                            :phone "88005553535"}]}
-         (sut/search-contacts {:db (tc/get-test-db)
-                               :query-params {:name "Joh"}})))
+          :body [#:contacts{:name "John Doe", :phone "88005553535"}
+                 #:contacts{:name "Jane Doe", :phone "88005553535"}
+                 #:contacts{:name "Scarlet Johansson", :phone "88005553535"}
+                 #:contacts{:name "Rich Hickey", :phone "88005553535"}]}
+         (sut/search-contacts {:reitit.core/match {:data {:db (tc/get-test-db)}}})))
 
   (is (= {:status 200
           :body [#:contacts{:name "John Doe"
                             :phone "88005553535"}
                  #:contacts{:name "Scarlet Johansson"
                             :phone "88005553535"}]}
-         (sut/search-contacts {:db (tc/get-test-db)
-                               :query-params {:name "jOh"}})))
+         (sut/search-contacts {:reitit.core/match {:data {:db (tc/get-test-db)}}
+                               :query-params {"name" "Joh"}})))
+
   (is (= {:status 200
           :body [#:contacts{:name "John Doe"
                             :phone "88005553535"}
                  #:contacts{:name "Scarlet Johansson"
                             :phone "88005553535"}]}
-         (sut/search-contacts {:db (tc/get-test-db)
-                               :query-params {:name "JOH"}})))
+         (sut/search-contacts {:reitit.core/match {:data {:db (tc/get-test-db)}}
+                               :query-params {"name" "jOh"}})))
   (is (= {:status 200
           :body [#:contacts{:name "John Doe"
                             :phone "88005553535"}
                  #:contacts{:name "Scarlet Johansson"
                             :phone "88005553535"}]}
-         (sut/search-contacts {:db (tc/get-test-db)
-                               :query-params {:name "joh"}}))))
+         (sut/search-contacts {:reitit.core/match {:data {:db (tc/get-test-db)}}
+                               :query-params {"name" "JOH"}})))
+  (is (= {:status 200
+          :body [#:contacts{:name "John Doe"
+                            :phone "88005553535"}
+                 #:contacts{:name "Scarlet Johansson"
+                            :phone "88005553535"}]}
+         (sut/search-contacts {:reitit.core/match {:data {:db (tc/get-test-db)}}
+                               :query-params {"name" "joh"}}))))
 
 (deftest read-contact-test
   (sut/create-contact
-   {:db (tc/get-test-db)
+   {:reitit.core/match {:data {:db (tc/get-test-db)}}
     :body-params {:name "John Doe"
                   :phone "88005553535"}})
 
   (is (= {:status 200
           :body #:contacts{:name "John Doe"
                            :phone "88005553535"}}
-         (sut/read-contact {:db (tc/get-test-db)
+         (sut/read-contact {:reitit.core/match {:data {:db (tc/get-test-db)}}
                             :path-params {:name "John Doe"}})))
 
   (is (= {:status 404}
-         (sut/read-contact {:db (tc/get-test-db)
+         (sut/read-contact {:reitit.core/match {:data {:db (tc/get-test-db)}}
                             :path-params {:name "JOHN DOE"}}))))
 
 (deftest delete-contact-test
   (sut/create-contact
-   {:db (tc/get-test-db)
+   {:reitit.core/match {:data {:db (tc/get-test-db)}}
     :body-params {:name "John Doe"
                   :phone "88005553535"}})
 
   (is (= {:status 404}
-         (sut/delete-contact {:db (tc/get-test-db)
+         (sut/delete-contact {:reitit.core/match {:data {:db (tc/get-test-db)}}
                               :path-params {:name "JOHN DOE"}})))
 
   (is (= {:status 204}
-         (sut/delete-contact {:db (tc/get-test-db)
+         (sut/delete-contact {:reitit.core/match {:data {:db (tc/get-test-db)}}
                               :path-params {:name "John Doe"}})))
 
   (is (= {:status 404}
-         (sut/delete-contact {:db (tc/get-test-db)
+         (sut/delete-contact {:reitit.core/match {:data {:db (tc/get-test-db)}}
                               :path-params {:name "John Doe"}}))))

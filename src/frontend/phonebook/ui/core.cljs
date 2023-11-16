@@ -1,9 +1,10 @@
 (ns phonebook.ui.core
   (:require
    [day8.re-frame.http-fx]
+   [phonebook.ui.pages.contact]
+   [phonebook.ui.pages.form]
    [phonebook.ui.pages.grid]
    [re-frame.core :as rf]
-   [reagent.core :as r]
    [reagent.dom :as rdom]
    [reitit.frontend]
    [reitit.frontend.controllers]
@@ -12,14 +13,29 @@
 (def routes
   (reitit.frontend/router
    ["/"
-    ["" {:view phonebook.ui.pages.grid/page
-         :controllers [{:start (fn [& _] (prn "start"))
-                        :stop (fn [& _] (prn "stop"))}]}]]))
+    [""
+     {:name        :grid
+      :view        phonebook.ui.pages.grid/page
+      :controllers [phonebook.ui.pages.grid/controller]}]
+    ["new"
+     {:name        :form
+      :view        phonebook.ui.pages.form/page
+      :controllers [phonebook.ui.pages.form/controller]}]
+    [":name"
+     {:name        :contact
+      :view        phonebook.ui.pages.contact/page
+      :controllers [phonebook.ui.pages.contact/controller]}]]
+   {:conflicts nil}))
 
 (rf/reg-fx
  :push-state
  (fn [route]
    (apply reitit.frontend.easy/push-state route)))
+
+(rf/reg-fx
+ :set-query
+ (fn [params]
+   (apply reitit.frontend.easy/set-query params)))
 
 (rf/reg-sub
  :current-route
@@ -33,12 +49,13 @@
          controllers (-> (:controllers old)
                          (reitit.frontend.controllers/apply-controllers new))
          new (assoc new :controllers controllers)]
-     (assoc db :current-route new))))
+     {:db (assoc db :current-route new)})))
 
 (defn current-page
   []
-  (when-let [{{:keys [view]} :data} (rf/subscribe [:current-route])]
-    [view]))
+  (if-let [{{:keys [view]} :data} @(rf/subscribe [:current-route])]
+    [view]
+    [:div "hello"]))
 
 (defn on-navigate
   [new]
