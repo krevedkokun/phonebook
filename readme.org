@@ -1,7 +1,7 @@
 ** how to run project
 1. run db
 #+begin_src shell
-UID=$(id -u) GID=$(id -g) docker compose up -d
+GID=$(id -g) docker compose up -d
 #+end_src
 
 2. install npm packages
